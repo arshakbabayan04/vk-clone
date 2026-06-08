@@ -11,12 +11,14 @@ const AddPost: React.FC<IAddPost> = ({ setPosts }) => {
 
   const [content, setContent] = useState("");
 
-  const addPostHandler = () => {
-    setPosts(prev => [...prev, {
-      author: users[0],
-      createdAt: new Date().toISOString(),
-      content,
-    }])
+  const addPostHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      setPosts(prev => [{
+        author: users[0],
+        createdAt: new Date().toISOString(),
+        content,
+      }, ...prev])
+    }
   }
 
   return ( 
