@@ -18,14 +18,16 @@ const AddPost: React.FC<IAddPost> = ({ setPosts }) => {
         createdAt: new Date().toISOString(),
         content,
       }, ...prev])
+      setContent("");
     }
   }
 
   return ( 
     <Box sx={{
-      border: "1px solid #ccc",
+      border: "none",
       borderRadius: '10px',
       padding: 2,
+      backgroundColor: "white",
     }}>
       <TextField
         label="Что у вас нового?"

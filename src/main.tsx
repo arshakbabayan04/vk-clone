@@ -9,6 +9,3 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 )
 
-// https://www.youtube.com/watch?v=OyE49CsSdiU&t=0s, 01:17:00
-
-// esor arelenq poster@, posteri nkarner@.

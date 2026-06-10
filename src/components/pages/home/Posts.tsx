@@ -9,12 +9,13 @@ interface IPosts {
 const Posts = ({posts}: IPosts) => {
   return ( 
     <>
-      {posts.map((post) => (
-        <Box sx={{
-          border: "1px solid #ccc",
+      {posts.map((post, indx) => (
+        <Box key={`Post-${indx}`} sx={{
+          border: "none",
           borderRadius: '10px',
+          backgroundColor: "white",
           padding: 2,
-          marginTop: 4,
+          marginTop: 2,
         }}>
           <Link to={`/profile/${post.author.id}`} key={post.author.id} style={{marginBottom: 12, display: "block", textDecoration: "none"}}> 
             <Box sx={{display: "flex", alignItems: "center"}}>

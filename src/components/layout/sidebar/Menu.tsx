@@ -7,7 +7,7 @@ const Menu = () => {
   const navigate = useNavigate()
 
   return ( 
-    <Card variant="outlined" sx={{backgroundColor: "#f1f7fa", borderRadius: 2, py: 1, border: "none", mb: 10}}>
+    <Card variant="outlined" sx={{backgroundColor: "white", borderRadius: 2, py: 1, border: "none", mb: 10}}>
       <List disablePadding>
         {menu.map((item) => (
           <ListItem disablePadding key={item.link}>

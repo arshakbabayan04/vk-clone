@@ -11,7 +11,7 @@ const UserItems = () => {
   const navigate = useNavigate();
 
   return ( 
-      <Card variant="outlined" sx={{p: 2, py: 2, border: "none", backgroundColor: "#f1f7fa", borderRadius: 2}}>
+      <Card variant="outlined" sx={{p: 2, py: 2, border: "none", backgroundColor: "white", borderRadius: 2}}>
         {users.map(user => (
           <Link to={`/profile/${user.id}`} key={user.id} style={{marginBottom: 12, display: "block", textDecoration: "none"}}> 
             <Box sx={{display: "flex", alignItems: "center"}}>
@@ -44,7 +44,7 @@ const UserItems = () => {
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigate('/messages')} sx={{px: 0, pb: 0}}>
               <ListItemIcon>
-                <QuestionAnswerIcon />
+                <QuestionAnswerIcon sx={{fill: "#447BBA"}} />
               </ListItemIcon>
               <ListItemText primary="Сообщения" />
             </ListItemButton>
