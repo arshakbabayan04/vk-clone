@@ -1,6 +1,13 @@
+import { Container, Paper } from "@mui/material";
+import LoginForm from "./LoginForm";
+
 const Auth = () => {
   return (
-    <div>Auth</div>
+    <Container maxWidth="xl">
+      <Paper>
+        <LoginForm />
+      </Paper>
+    </Container>
   );
 }
  
