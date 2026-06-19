@@ -1,6 +1,7 @@
 import { TextField, Button, Stack, ButtonGroup } from "@mui/material";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
 type LoginFormData = {
   email: string;
@@ -17,9 +18,19 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
+  const onSubmit = async (data: LoginFormData) => {
+
+    const auth = getAuth()
+
     if (isRegForm) {
-      console.log("Registration data:", data);
+      try {
+        await createUserWithEmailAndPassword(auth, data.email, data.password);
+      } 
+      catch (error) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
+      }
     } else {
       console.log("Login data:", data);
     }
