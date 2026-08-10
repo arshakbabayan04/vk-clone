@@ -4,6 +4,7 @@ import RoutesList from './components/routes/RoutesList'
 import './index.css'
 
 import firebase from 'firebase/compat/app';
+import AuthProvider from './components/providers/AuthProvider';
 
 firebase.initializeApp({
   apiKey: "AIzaSyCAE4YE6tWRvBaQ3jW8abnVbCWKI8_pnjU",
@@ -16,7 +17,11 @@ firebase.initializeApp({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RoutesList/>
+    <AuthProvider>
+      <RoutesList/> 
+    </AuthProvider>
   </StrictMode>,
 )
+
+//https://www.youtube.com/watch?v=OyE49CsSdiU 2:07:00
 
