@@ -16,11 +16,14 @@ const AuthProvider = ({children}: Props) => {
 
   useEffect(() => {
     const unListen = onAuthStateChanged(ga, (authUser) => {
-      setUser(authUser ? {
-        id: authUser.uid,
-        avatar: users[1].avatar,
-        name: authUser?.displayName || ''
-      } : null)
+      if (authUser)
+        setUser({
+          id: authUser.uid,
+          avatar: users[1].avatar,
+          name: authUser?.displayName || ''
+        })
+      else 
+        setUser(null)
     })
 
     return () => {

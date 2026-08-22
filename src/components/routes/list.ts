@@ -8,7 +8,7 @@ export const routes = [
   {
     path: "",
     element: Home,
-    auth: false
+    auth: true
   },
   {
     path: "profile/:id",

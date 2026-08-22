@@ -1,8 +1,9 @@
 import { TextField, Button, Stack, ButtonGroup, Alert } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "../../providers/useAuth";
+import { useNavigate } from "react-router-dom";
 
 type LoginFormData = {
   email: string;
@@ -10,7 +11,7 @@ type LoginFormData = {
 };
 
 const LoginForm = () => {
-  const {ga} = useAuth();
+  const {ga, user} = useAuth();
 
   const [isRegForm, setIsRegForm] = useState(false);
   const [error, setError] = useState('');
@@ -46,6 +47,14 @@ const LoginForm = () => {
       }
     }
   }
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   return ( 
     <>
