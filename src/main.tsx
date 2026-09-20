@@ -23,5 +23,3 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 )
 
-//https://www.youtube.com/watch?v=OyE49CsSdiU 2:07:00
-

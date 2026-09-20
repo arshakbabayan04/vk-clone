@@ -3,12 +3,13 @@ import { signOut } from "firebase/auth";
 import { useAuth } from "../../providers/useAuth";
 
 const UserLogout = () => {
-  const { ga } = useAuth();
+  const { ga, user } = useAuth();
   return ( 
     <Card
       variant="outlined"
       sx={{p: 2, py: 2, border: "none", backgroundColor: "white", borderRadius: 2}}
     >
+      {user && <p>Вы вошли как: {user.name}</p>}
       <Button
         variant="contained"
         color="primary"

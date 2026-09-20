@@ -1,11 +1,12 @@
 import { TextField, Button, Stack, ButtonGroup, Alert } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useAuth } from "../../providers/useAuth";
 import { useNavigate } from "react-router-dom";
 
 type LoginFormData = {
+  name?: string;
   email: string;
   password: string;
 };
@@ -18,6 +19,7 @@ const LoginForm = () => {
 
   const {handleSubmit, control, reset} = useForm<LoginFormData>({
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -27,7 +29,8 @@ const LoginForm = () => {
 
     if (isRegForm) {
       try {
-        await createUserWithEmailAndPassword(ga, data.email, data.password);
+        const res = await createUserWithEmailAndPassword(ga, data.email, data.password);
+        await updateProfile(res.user, { displayName: data.name });
         reset();
       } 
       catch (error) {
@@ -61,6 +64,19 @@ const LoginForm = () => {
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field, fieldState }) => (
+              <TextField
+                {...field}
+                label="Name"
+                error={!!fieldState.error}
+                helperText={fieldState.error?.message}
+              />
+            )}
+          />
+          
           <Controller
             name="email"
             control={control}

@@ -1,23 +1,31 @@
 import { Box, TextField } from "@mui/material";
 import type { IPost, TypeSetState } from "../../../types";
 import { useState } from "react";
-import { users } from "../../layout/sidebar/dataUsers";
+import { useAuth } from "../../providers/useAuth";
+import { addDoc, collection } from "firebase/firestore";
 
 interface IAddPost {
   setPosts: TypeSetState<IPost[]>
 }
 
-const AddPost: React.FC<IAddPost> = ({ setPosts }) => {
+const AddPost: React.FC<IAddPost> = () => {
 
   const [content, setContent] = useState("");
+  const { user, db } = useAuth();
 
-  const addPostHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      setPosts(prev => [{
-        author: users[0],
-        createdAt: new Date().toISOString(),
-        content,
-      }, ...prev])
+  const addPostHandler = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && user) {
+
+      try {
+        const docRef = await addDoc(collection(db, "posts"), {
+          author: user,
+          createdAt: new Date().toISOString(),
+          content,
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
       setContent("");
     }
   }

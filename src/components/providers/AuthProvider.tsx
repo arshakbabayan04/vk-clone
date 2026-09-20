@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { IUser } from "../../types";
 import type { ReactNode } from "react";
 import { getAuth, onAuthStateChanged} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 import { users } from "../layout/sidebar/dataUsers";
 import { AuthContext } from "./AuthContext";
 
@@ -13,6 +14,7 @@ const AuthProvider = ({children}: Props) => {
   const [user, setUser] = useState<IUser | null>(null);
 
   const ga = getAuth()
+  const db = getFirestore()
 
   useEffect(() => {
     const unListen = onAuthStateChanged(ga, (authUser) => {
@@ -20,7 +22,7 @@ const AuthProvider = ({children}: Props) => {
         setUser({
           id: authUser.uid,
           avatar: users[1].avatar,
-          name: authUser?.displayName || ''
+          name: authUser.displayName || ''
         })
       else 
         setUser(null)
@@ -34,8 +36,9 @@ const AuthProvider = ({children}: Props) => {
   const values = useMemo(() => ({
     user,
     setUser,
-    ga
-  }), [user, setUser, ga])
+    ga, 
+    db
+  }), [user, setUser, ga, db])
 
   return (
     <AuthContext.Provider value={values}>
