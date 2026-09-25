@@ -1,12 +1,32 @@
 import { Avatar, Box, ImageList, ImageListItem, Typography } from "@mui/material";
 import type { IPost } from "../../../types";
 import { Link } from "react-router-dom";
+import { collection, onSnapshot } from "firebase/firestore";
+import { useEffect } from "react";
+import { useAuth } from "../../providers/useAuth";
 
 interface IPosts {
   posts: IPost[]
 }
 
 const Posts = ({posts}: IPosts) => {
+  const { db } = useAuth();
+
+  useEffect(() => {
+  const unsubscribe = onSnapshot(
+    collection(db, "posts"),
+    (snapshot) => {
+        const posts = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        console.log("Posts updated:", posts);
+      }
+    );
+
+    return () => unsubscribe();
+  }, []);
   return ( 
     <>
       {posts.map((post, indx) => (
