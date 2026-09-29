@@ -1,16 +1,15 @@
 import { Avatar, Box, ImageList, ImageListItem, Typography } from "@mui/material";
-import type { IPost } from "../../../types";
 import { Link } from "react-router-dom";
 import { collection, onSnapshot } from "firebase/firestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../providers/useAuth";
+import type { IPost } from "../../../types";
+import { initialPosts } from "./InitialPosts";
+import Card from "../../ui/Card";
 
-interface IPosts {
-  posts: IPost[]
-}
-
-const Posts = ({posts}: IPosts) => {
+const Posts = () => {
   const { db } = useAuth();
+  const [posts, setPosts] = useState<IPost[]>(initialPosts);
 
   useEffect(() => {
   const unsubscribe = onSnapshot(
@@ -19,9 +18,9 @@ const Posts = ({posts}: IPosts) => {
         const posts = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
-        }));
+        })) as IPost[]; 
 
-        console.log("Posts updated:", posts);
+        setPosts([...initialPosts, ...posts]);
       }
     );
 
@@ -30,13 +29,7 @@ const Posts = ({posts}: IPosts) => {
   return ( 
     <>
       {posts.map((post, indx) => (
-        <Box key={`Post-${indx}`} sx={{
-          border: "none",
-          borderRadius: '10px',
-          backgroundColor: "white",
-          padding: 2,
-          marginTop: 2,
-        }}>
+        <Card key={`Post-${indx}`} stls={{marginTop: 2}}>
           <Link to={`/profile/${post.author.id}`} key={post.author.id} style={{marginBottom: 12, display: "block", textDecoration: "none"}}> 
             <Box sx={{display: "flex", alignItems: "center"}}>
               <Box sx={{position: "relative", width: "fit-content"}}>
@@ -83,7 +76,7 @@ const Posts = ({posts}: IPosts) => {
               </Box>
             )
           }
-        </Box>
+        </Card>
       ))}
     </>
   );

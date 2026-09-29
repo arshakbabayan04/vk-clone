@@ -4,6 +4,8 @@ import { useForm, Controller } from "react-hook-form";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useAuth } from "../../providers/useAuth";
 import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
+import { createUserFromAuth } from "../../utils/createUserFromAuth";
 
 type LoginFormData = {
   name?: string;
@@ -12,7 +14,7 @@ type LoginFormData = {
 };
 
 const LoginForm = () => {
-  const {ga, user} = useAuth();
+  const {ga, user, db, setUser} = useAuth();
 
   const [isRegForm, setIsRegForm] = useState(false);
   const [error, setError] = useState('');
@@ -31,6 +33,15 @@ const LoginForm = () => {
       try {
         const res = await createUserWithEmailAndPassword(ga, data.email, data.password);
         await updateProfile(res.user, { displayName: data.name });
+
+        await setDoc(doc(db, "users", res.user.uid), {
+          name: data.name,
+          email: data.email,
+          avatar: "",
+          friends: [],
+        });
+
+        setUser(createUserFromAuth(res.user));
         reset();
       } 
       catch (error) {

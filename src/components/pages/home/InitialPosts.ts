@@ -2,6 +2,7 @@ import type { IPost } from "../../../types";
 
 export const initialPosts: IPost[] = [
   {
+    id: '1',
     author: {
       id: '345345',
       name: 'National Geographic',

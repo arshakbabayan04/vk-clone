@@ -8,6 +8,7 @@ export interface IUser {
 }
 
 export interface IPost {
+  id: string;
   author: IUser;
   createdAt: string;
   content: string;

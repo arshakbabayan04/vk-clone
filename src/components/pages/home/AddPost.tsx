@@ -1,14 +1,9 @@
 import { Box, TextField, Alert } from "@mui/material";
-import type { IPost, TypeSetState } from "../../../types";
 import { useState } from "react";
 import { useAuth } from "../../providers/useAuth";
 import { addDoc, collection } from "firebase/firestore";
 
-interface IAddPost {
-  setPosts: TypeSetState<IPost[]>
-}
-
-const AddPost: React.FC<IAddPost> = () => {
+const AddPost: React.FC = () => {
 
   const [content, setContent] = useState("");
   const [error, setError] = useState('');

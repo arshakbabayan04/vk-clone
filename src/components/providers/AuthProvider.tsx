@@ -3,8 +3,8 @@ import type { IUser } from "../../types";
 import type { ReactNode } from "react";
 import { getAuth, onAuthStateChanged} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { users } from "../layout/sidebar/dataUsers";
 import { AuthContext } from "./AuthContext";
+import { createUserFromAuth } from "../utils/createUserFromAuth";
 
 interface Props {
   children: ReactNode;
@@ -19,11 +19,7 @@ const AuthProvider = ({children}: Props) => {
   useEffect(() => {
     const unListen = onAuthStateChanged(ga, (authUser) => {
       if (authUser)
-        setUser({
-          id: authUser.uid,
-          avatar: users[1].avatar,
-          name: authUser.displayName || ''
-        })
+        setUser(createUserFromAuth(authUser))
       else 
         setUser(null)
     })
