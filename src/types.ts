@@ -20,3 +20,11 @@ export interface IMenuItem {
   link: string;
   icon: React.ComponentType;
 }
+
+export interface IMessage {
+  id: string;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  createdAt: string;
+}
