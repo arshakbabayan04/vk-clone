@@ -1,9 +1,11 @@
 import { Button, Card } from "@mui/material";
 import { signOut } from "firebase/auth";
 import { useAuth } from "../../providers/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const UserLogout = () => {
   const { ga, user } = useAuth();
+  const navigate = useNavigate();
   return ( 
     <Card
       variant="outlined"
@@ -13,7 +15,10 @@ const UserLogout = () => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => signOut(ga)}
+        onClick={
+          () => {signOut(ga)
+          navigate("/auth")}
+        }
       >
         Выйти
       </Button>

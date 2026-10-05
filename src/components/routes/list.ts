@@ -1,7 +1,6 @@
 import Auth from "../pages/auth/Auth";
 import Friends from "../pages/friends/Friends";
 import Home from "../pages/home/Home";
-import Conversation from "../pages/messages/Conversation";
 import Messages from "../pages/messages/Messages";
 import Profile from "../pages/profile/Profile";
 export const routes = [
@@ -21,8 +20,8 @@ export const routes = [
     auth: false
   },
   {
-    path: "message/:id",
-    element: Conversation,
+    path: "messages/:receiverId",
+    element: Messages,
     auth: false
   },
   {

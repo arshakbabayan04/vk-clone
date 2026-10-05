@@ -1,4 +1,4 @@
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import type { IMessage } from "../../../types";
 import { useAuth } from "../../providers/useAuth";
@@ -16,14 +16,15 @@ import {
 import SendIcon from '@mui/icons-material/Send';
 import PersonIcon from '@mui/icons-material/Person';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useParams } from "react-router-dom";
 
 const Messages = () => {
   
   const { db, user } = useAuth();
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [content, setContent] = useState("");
-  const [receiverId, setReceiverId] = useState("");
   const [error, setError] = useState('');
+  const { receiverId } = useParams();
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -50,20 +51,37 @@ const Messages = () => {
   }
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
+    if (!user?.id || !receiverId) return;
+
+    const messagesQuery = query(
       collection(db, "messages"),
+      orderBy("createdAt", "asc")
+    );
+
+    const unsubscribe = onSnapshot(
+      messagesQuery,
       (snapshot) => {
-          const messages = snapshot.docs.map((doc) => ({
+        const messages = snapshot.docs
+          .map((doc) => ({
             id: doc.id,
             ...doc.data(),
-          })) as IMessage[]; 
-  
-          setMessages([...messages]);
+          })) as IMessage[]
+
+          const filteredMessages = messages
+          .filter(
+            (message) =>
+              (message.senderId === user.id &&
+                message.receiverId === receiverId) ||
+              (message.senderId === receiverId &&
+                message.receiverId === user.id)
+          );
+
+        setMessages([...filteredMessages]);
         }
       );
   
       return () => unsubscribe();
-    }, []);
+    }, [user?.id, receiverId, db]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
