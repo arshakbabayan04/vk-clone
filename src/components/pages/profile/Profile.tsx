@@ -2,8 +2,10 @@ import { Avatar } from "@mui/material";
 import { useAuth } from "../../providers/useAuth";
 import { useProfilePosts } from "../../hooks/useProfilePosts";
 import { Link } from "react-router-dom";
-import { Box, ImageList, ImageListItem, Typography } from "@mui/material";
+import { Box, ImageList, ImageListItem, Typography, Paper, MenuList, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
 import Card from "../../ui/Card";
+import CollectionsIcon from '@mui/icons-material/Collections';
+import './profile.css';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -12,11 +14,36 @@ const Profile = () => {
   return (
     <>
       <Card stls={{marginTop: 0, display: "flex", gap: 2,alignItems: "center", paddingTop: 4, paddingBottom: 4}}>
-        <Avatar
-          alt={user?.name}
-          sx={{width: 180, height: 180}}
-          src={user?.avatar} 
-        />
+        <div className="profile-avatar">
+          <Avatar
+            alt={user?.name}
+            sx={{width: 180, height: 180}}
+            src={user?.avatar} 
+          />
+          <Paper className="profile-avatar_menu" variant="outlined" 
+            sx={{
+              backgroundColor: "white", 
+              borderRadius: 2, 
+              border: "none",  
+              width: '100%', 
+              maxWidth: '100%', 
+              position: 'absolute', 
+              bottom: '-52px', 
+              left: 0, 
+              right: 0, 
+              zIndex: 1, 
+              boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
+            }}>
+            <MenuList>
+              <MenuItem>
+                <ListItemIcon>
+                  <CollectionsIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText>Add image</ListItemText>
+              </MenuItem>
+            </MenuList>
+          </Paper>
+        </div>
         <h2>{user?.name}</h2>
       </Card>
       {loading && <p>Loading...</p>}

@@ -1,0 +1,36 @@
+.profile-avatar {
+  position: relative;
+  color:white;
+}
+
+.profile-avatar .profile-avatar_menu {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+.profile-avatar:hover .profile-avatar_menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.profile-avatar::after {
+  content: "+";
+  font-size: 25px;
+  font-weight: 600;
+  line-height: 1;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 25px;
+  height: 25px;
+  background-color: #1976d2;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}

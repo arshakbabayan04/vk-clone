@@ -1,4 +1,4 @@
-import { addDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import type { IMessage } from "../../../types";
 import { useAuth } from "../../providers/useAuth";
@@ -53,35 +53,52 @@ const Messages = () => {
   useEffect(() => {
     if (!user?.id || !receiverId) return;
 
-    const messagesQuery = query(
-      collection(db, "messages"),
-      orderBy("createdAt", "asc")
-    );
+    let sentMessages: IMessage[] = [];
+    let receivedMessages: IMessage[] = [];
 
-    const unsubscribe = onSnapshot(
-      messagesQuery,
-      (snapshot) => {
-        const messages = snapshot.docs
-          .map((doc) => ({
+    const updateMessages = () => {
+      setMessages(
+        [...sentMessages, ...receivedMessages].sort(
+          (a, b) => a.createdAt.localeCompare(b.createdAt)
+        )
+      );
+    };
+
+    const queries = [
+      {
+        senderId: user.id,
+        receiverId,
+      },
+      {
+        senderId: receiverId,
+        receiverId: user.id,
+      },
+    ];
+
+    const unsubscribes = queries.map((item, index) =>
+      onSnapshot(
+        query(
+          collection(db, "messages"),
+          where("senderId", "==", item.senderId),
+          where("receiverId", "==", item.receiverId)
+        ),
+        (snapshot) => {
+          const result = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
-          })) as IMessage[]
+          })) as IMessage[];
 
-          const filteredMessages = messages
-          .filter(
-            (message) =>
-              (message.senderId === user.id &&
-                message.receiverId === receiverId) ||
-              (message.senderId === receiverId &&
-                message.receiverId === user.id)
-          );
+          if (index === 0) sentMessages = result;
+          else receivedMessages = result;
 
-        setMessages([...filteredMessages]);
-        }
-      );
-  
-      return () => unsubscribe();
-    }, [user?.id, receiverId, db]);
+          updateMessages();
+        },
+        console.error
+      )
+    );
+
+    return () => unsubscribes.forEach((unsubscribe) => unsubscribe());
+  }, [user?.id, receiverId, db]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center' }}>
